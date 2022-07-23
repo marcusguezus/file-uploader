@@ -1,43 +1,39 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { FileUploadService } from './file-upload.service';
+﻿import { HttpClient, HttpEventType } from '@angular/common/http';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
-    selector: 'app-file-upload',
-    templateUrl: 'file-upload.component.html',
-    styleUrls: ['file-upload.component.css']
+    selector: 'file-upload',
+    templateUrl: 'file-upload.component.html'
+   /* styleUrls: ['file-upload.component.css']*/
 })
-export class FileUploadComponent implements OnInit {
 
-    // Variable to store shortLink from api response
-    shortLink: string = "";
-    loading: boolean = false; // Flag variable
-    file: File = null; // Variable to store file
+export class FileUploadComponent implements OnInit {
+    public message: string;
+    public progress: number;
+    @Output() public onUploadFInished = new EventEmitter();
 
     // Inject service 
-    constructor(private fileUploadService: FileUploadService) { }
+    constructor(private http: HttpClient) { }
 
     ngOnInit(): void {
     }
 
-    // On file Select
-    onChange(event) {
-        this.file = event.target.files[0];
-    }
+    public uploadFile = (files) => {
+        if (files.length === 0) return;
 
-    // OnClick of button Upload
-    onUpload() {
-        this.loading = !this.loading;
-        console.log(this.file);
-        this.fileUploadService.upload(this.file).subscribe(
-            (event: any) => {
-                if (typeof (event) === 'object') {
+        let fileToUpload = <File>files[0];
+        const formData = new FormData();
+        formData.append('file', fileToUpload, fileToUpload.name);
 
-                    // Short link via api response
-                    this.shortLink = event.link;
-
-                    this.loading = false; // Flag variable 
+        this.http.post('https://localhost:44304/api/fileupload', formData, { reportProgress: true, observe: 'events' })
+            .subscribe(event => {
+                if (event.type === HttpEventType.UploadProgress) {
+                    this.progress = Math.round(100 * event.loaded / event.total);
                 }
-            }
-        );
+                else if (event.type === HttpEventType.Response) {
+                    this.message = 'Upload success.';
+                    this.onUploadFInished.emit(event.body);
+                }
+            });
     }
 }

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace FileUploader.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class FileUpload : Controller
+    [Route("api/[controller]")]
+    public class FileUploadController : Controller
     {
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload()
@@ -19,7 +19,7 @@ namespace FileUploader.Controllers
             {
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Resources", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                //var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
                 if (file.Length > 0)
                 {

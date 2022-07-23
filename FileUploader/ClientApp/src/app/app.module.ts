@@ -12,25 +12,28 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
 import { FileUploadComponent } from './file-upload/file-upload.component';
 
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: FileUploadComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-    ])
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavMenuComponent,
+        HomeComponent,
+        CounterComponent,
+        FetchDataComponent,
+        FileUploadComponent
+    ],
+    imports: [
+        BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+        HttpClientModule,
+        FormsModule,
+        RouterModule.forRoot([
+            { path: '', component: FileUploadComponent, pathMatch: 'full' },
+            { path: 'counter', component: CounterComponent },
+            { path: 'fetch-data', component: FetchDataComponent },
+            { path: 'upload', component: FileUploadComponent },
+        ])
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
