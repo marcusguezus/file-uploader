@@ -5,3 +5,4 @@
 /FileUploader/.vs/FileUploader
 /FileUploader/bin/Debug/netcoreapp3.1
 /FileUploader/obj
+/FileUploader/ClientApp/node_modules/.cache/angular-build-dl
