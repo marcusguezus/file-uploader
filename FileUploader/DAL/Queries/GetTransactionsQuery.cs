@@ -8,13 +8,10 @@ using System.Threading;
 
 namespace FileUploader.DAL.Queries
 {
-    public class GetTransactionsQuery
+    public class GetTransactionsQuery : IRequest<List<Transaction>>
     {
-        public class Query : IRequest<List<Transaction>>
-        {
-            public bool IncludeOpc { get; set; } = false;
-        }
-        public class QueryHandler : IRequestHandler<Query, List<Transaction>>
+
+        public class QueryHandler : IRequestHandler<GetTransactionsQuery, List<Transaction>>
         {
             private readonly TransactionContext _dbContext;
 
@@ -23,7 +20,7 @@ namespace FileUploader.DAL.Queries
                 _dbContext = dbContext;
             }
 
-            public Task<List<Transaction>> Handle(Query query, CancellationToken cancellationToken)
+            public Task<List<Transaction>> Handle(GetTransactionsQuery query, CancellationToken cancellationToken)
             {
                 var transactionList = _dbContext.Transactions.ToList();
 

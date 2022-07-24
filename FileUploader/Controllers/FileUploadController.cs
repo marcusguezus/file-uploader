@@ -32,28 +32,34 @@ namespace FileUploader.Controllers
             try
             {
                 var file = Request.Form.Files[0];
+                var fileExtension = Path.GetExtension(file.FileName).TrimStart('.');
 
-                if (file.Length > 0)
+                if (fileExtension == "csv" || fileExtension == "xml")
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var processor = ProcessorFactory.GetProcessorInstance(Path.GetExtension(file.FileName).TrimStart('.'), _mediator);
-
-                    using (Stream stream = file.OpenReadStream())
+                    if (ConvertBytesToMegabytes(file.Length) < 1f)
                     {
-                        using (StreamReader reader = new StreamReader(stream))
+                        var processor = ProcessorFactory.GetProcessorInstance(fileExtension, _mediator);
+
+                        using (Stream stream = file.OpenReadStream())
                         {
-                            string data = await reader.ReadToEndAsync();
+                            using (StreamReader reader = new StreamReader(stream))
+                            {
+                                string data = await reader.ReadToEndAsync();
 
-                            processor.ProcessFile(data);
+                                processor.ProcessFile(data);
+                            }
                         }
-                    }
 
-                    return Ok();
+                        return Ok("Upload success");
+                    }
+                    else
+                    {
+                        return BadRequest("File must not be more than 1MB");
+                    }
                 }
                 else
                 {
-
-                    return BadRequest();
+                    return BadRequest("Unknown Format");
                 }
             }
             catch (Exception ex)
@@ -63,7 +69,7 @@ namespace FileUploader.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("transactions")]
         public async Task<IActionResult> GetTransactions()
         {
             var query = new GetTransactionsQuery();
@@ -71,5 +77,11 @@ namespace FileUploader.Controllers
 
             return Ok(result);
         }
+
+        double ConvertBytesToMegabytes(long bytes)
+        {
+            return (bytes / 1024f) / 1024f;
+        }
+
     }
 }

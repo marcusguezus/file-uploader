@@ -4,3 +4,10 @@
     margin-left: 15px;
     line-height: 36px;
 }
+
+.uploaderror {
+    font-weight: bold;
+    color: #983535;
+    margin-left: 15px;
+    line-height: 36px;
+}

@@ -15,7 +15,7 @@ namespace FileUploader.Services
             switch (fileExtension)
             {
                 case "csv":
-                    processor = new CsvProcessor();
+                    processor = new CsvProcessor(mediator);
                     break;
                 case "xml":
                     processor = new XmlProcessor(mediator);
