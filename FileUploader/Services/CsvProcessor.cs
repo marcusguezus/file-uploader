@@ -1,5 +1,7 @@
 ﻿using FileUploader.DAL.Command;
+using FileUploader.Interface;
 using FileUploader.Models;
+using FileUploader.Models.Error;
 using MediatR;
 using Microsoft.VisualBasic.FileIO;
 using System;
@@ -21,14 +23,17 @@ namespace FileUploader.Services
 
         }
 
-        public bool ProcessFile(string fileContent)
+        public ValidationResult ProcessFile(string fileContent)
         {
 
             var transactions = new List<Transaction>();
+            var invalidInfo = new ValidationResult();
 
             Transaction transaction;
 
             var isFileValid = true;
+
+            int line = 0;
 
             using (TextFieldParser parser = new TextFieldParser(new StringReader(fileContent)))
             {
@@ -43,6 +48,7 @@ namespace FileUploader.Services
                     var readFields = parser.ReadFields();
                     if (readFields != null)
                     {
+                        line += 1;
                         if (readFields.Length == 5)
                         {
                             transaction = new Transaction()
@@ -58,6 +64,7 @@ namespace FileUploader.Services
                         }
                         else
                         {
+                            invalidInfo.LineErrors.Add(line);
                             isFileValid = false;
                         }
                     }
@@ -74,7 +81,9 @@ namespace FileUploader.Services
                 _ = _mediator.Send(createTransactionsCommand).Result;
             }
 
-            return isFileValid;
+            invalidInfo.IsFileValid = isFileValid;
+
+            return invalidInfo;
         }
     }
 }

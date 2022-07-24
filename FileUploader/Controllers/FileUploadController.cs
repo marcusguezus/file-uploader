@@ -1,4 +1,5 @@
 ﻿using FileUploader.DAL.Queries;
+using FileUploader.Interface;
 using FileUploader.Models;
 using FileUploader.Services;
 using MediatR;
@@ -17,13 +18,14 @@ namespace FileUploader.Controllers
     [Route("api/[controller]")]
     public class FileUploadController : Controller
     {
-        private FileValidation _settings;
+        // private FileValidation _settings;
         private readonly IMediator _mediator;
+        private readonly IFileValidator _validator;
 
-        public FileUploadController(IOptions<FileValidation> settings, IMediator mediator)
+        public FileUploadController(IMediator mediator, IFileValidator validator)
         {
-            _settings = settings.Value;
             _mediator = mediator;
+            _validator = validator;
         }
 
         [HttpPost, DisableRequestSizeLimit]
@@ -34,33 +36,25 @@ namespace FileUploader.Controllers
                 var file = Request.Form.Files[0];
                 var fileExtension = Path.GetExtension(file.FileName).TrimStart('.');
 
-                if (fileExtension == "csv" || fileExtension == "xml")
+                if (_validator.ValidateFile(file.FileName, file.Length, out string message))
                 {
-                    if (ConvertBytesToMegabytes(file.Length) < 1f)
-                    {
-                        var processor = ProcessorFactory.GetProcessorInstance(fileExtension, _mediator);
+                    var processor = ProcessorFactory.GetProcessorInstance(fileExtension, _mediator);
 
-                        using (Stream stream = file.OpenReadStream())
+                    using (Stream stream = file.OpenReadStream())
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
                         {
-                            using (StreamReader reader = new StreamReader(stream))
+                            string data = await reader.ReadToEndAsync();
+                            var result = processor.ProcessFile(data);
+                            if (!result.IsFileValid)
                             {
-                                string data = await reader.ReadToEndAsync();
-
-                                processor.ProcessFile(data);
+                                return BadRequest(result);
                             }
+                            return Ok();
                         }
-
-                        return Ok("Upload success");
-                    }
-                    else
-                    {
-                        return BadRequest("File must not be more than 1MB");
                     }
                 }
-                else
-                {
-                    return BadRequest("Unknown Format");
-                }
+                return BadRequest(message);
             }
             catch (Exception ex)
             {
@@ -69,8 +63,8 @@ namespace FileUploader.Controllers
             }
         }
 
-        [HttpGet("transactions")]
-        public async Task<IActionResult> GetTransactions()
+        [HttpGet("currency/{currency}")]
+        public async Task<IActionResult> GetTransactionsByCurrency(string currency)
         {
             var query = new GetTransactionsQuery();
             var result = await _mediator.Send(query);
@@ -78,10 +72,7 @@ namespace FileUploader.Controllers
             return Ok(result);
         }
 
-        double ConvertBytesToMegabytes(long bytes)
-        {
-            return (bytes / 1024f) / 1024f;
-        }
+
 
     }
 }

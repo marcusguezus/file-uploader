@@ -12,18 +12,27 @@ export class FileUploadComponent implements OnInit {
     public message: string;
     public errorMessage: string;
     public progress: number;
+    public validationResult: any;
+
     @Output() public onUploadFInished = new EventEmitter();
+
 
     // Inject service 
     constructor(private http: HttpClient, private router: Router) { }
 
     ngOnInit(): void {
-        console.log(this.router.url);
+        this.validationResult = { isFileValid: true, lineErrors: [] };
+    }
+
+    private clearFields() {
+        this.message = "";
+        this.validationResult = { isFileValid: true, lineErrors: [] };
+        this.errorMessage = "";
     }
 
     public uploadFile = (files) => {
         if (files.length === 0) return;
-
+        this.clearFields();
         let fileToUpload = <File>files[0];
         const formData = new FormData();
         formData.append('file', fileToUpload, fileToUpload.name);
@@ -31,19 +40,20 @@ export class FileUploadComponent implements OnInit {
         this.http.post(location.origin + '/api/fileupload', formData, { reportProgress: true, observe: 'events' })
             .subscribe(
                 (event) => {
-                    debugger;
-                    if (event.type === HttpEventType.UploadProgress) {
-                        this.progress = Math.round(100 * event.loaded / event.total);
-                    }
-                    else if (event.type === HttpEventType.Response) {
+                    if (event.type === HttpEventType.Response) {
                         this.message = event.statusText;
                         this.onUploadFInished.emit(event.body);
                     }
                 },
                 (error) => {
-                    debugger;
-                    this.errorMessage = error.error;
+                    if (error.error.lineErrors) {
+                        this.validationResult = error.error;
+                    }
+                    else {
+                        this.errorMessage = error.error;
+                    }
                 }
             );
     }
+
 }

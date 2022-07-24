@@ -5,13 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileUploader.Models;
 using System.Threading;
+using FileUploader.DataTransferObject;
 
 namespace FileUploader.DAL.Queries
 {
-    public class GetTransactionsQuery : IRequest<List<Transaction>>
+    public class GetTransactionsQuery : IRequest<IQueryable<Transaction>>
     {
 
-        public class QueryHandler : IRequestHandler<GetTransactionsQuery, List<Transaction>>
+        public class QueryHandler : IRequestHandler<GetTransactionsQuery, IQueryable<Transaction>>
         {
             private readonly TransactionContext _dbContext;
 
@@ -20,9 +21,9 @@ namespace FileUploader.DAL.Queries
                 _dbContext = dbContext;
             }
 
-            public Task<List<Transaction>> Handle(GetTransactionsQuery query, CancellationToken cancellationToken)
+            public Task<IQueryable<Transaction>> Handle(GetTransactionsQuery query, CancellationToken cancellationToken)
             {
-                var transactionList = _dbContext.Transactions.ToList();
+                var transactionList = _dbContext.Transactions.AsQueryable();
 
                 return Task.FromResult(transactionList);
             }

@@ -1,4 +1,5 @@
 using FileUploader.DAL;
+using FileUploader.Interface;
 using FileUploader.Models;
 using FileUploader.Services;
 using MediatR;
@@ -44,6 +45,7 @@ namespace FileUploader
             services.AddDbContext<TransactionContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddSingleton<IFileValidator,FileValidator>();
             services.AddMediatR(typeof(Startup));
             services.Configure<FileValidation>(Configuration.GetSection("FileValidation"));
         }

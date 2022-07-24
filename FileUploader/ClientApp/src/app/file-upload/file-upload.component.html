@@ -1,17 +1,17 @@
 ﻿<div class="row" style="margin-bottom: 15px;">
     <div class="col-md-3">
         <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display: none" />
-        <button type="button" class="btn-primary btn-success" (click)="file.click()">Upload File</button>
+        <button type="button" class="btn-primary btn-success" (click)="file.value='';file.click()">Upload File</button>
     </div>
     <div class="col-md-4">
-        <span class="upload" *ngIf="progress > 0">
-            {{progress}}%
-        </span>
-        <span class="upload" *ngIf="message">
+        <span class="upload" *ngIf="validationResult.isFileValid">
             {{message}}
         </span>
         <span class="uploaderror" *ngIf="errorMessage">
             {{errorMessage}}
+        </span>
+        <span class="uploaderror" *ngIf="!validationResult.isFileValid">
+           Invalid Data. Please visit line <span *ngFor="let line of validationResult.lineErrors ;let i = index">{{line}}{{i === validationResult.lineErrors.length -1 ? '' : ',' }}</span>
         </span>
     </div>
 </div>

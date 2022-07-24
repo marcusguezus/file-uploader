@@ -81,7 +81,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div class=\"row\" style=\"margin-bottom: 15px;\">\r\n    <div class=\"col-md-3\">\r\n        <input type=\"file\" #file placeholder=\"Choose file\" (change)=\"uploadFile(file.files)\" style=\"display: none\" />\r\n        <button type=\"button\" class=\"btn-primary btn-success\" (click)=\"file.click()\">Upload File</button>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n        <span class=\"upload\" *ngIf=\"progress > 0\">\r\n            {{progress}}%\r\n        </span>\r\n        <span class=\"upload\" *ngIf=\"message\">\r\n            {{message}}\r\n        </span>\r\n    </div>\r\n</div>";
+    __webpack_exports__["default"] = "<div class=\"row\" style=\"margin-bottom: 15px;\">\r\n    <div class=\"col-md-3\">\r\n        <input type=\"file\" #file placeholder=\"Choose file\" (change)=\"uploadFile(file.files)\" style=\"display: none\" />\r\n        <button type=\"button\" class=\"btn-primary btn-success\" (click)=\"file.click()\">Upload File</button>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n        <span class=\"upload\" *ngIf=\"validationResult.isFileValid\">\r\n            {{message}}\r\n        </span>\r\n        <span class=\"uploaderror\" *ngIf=\"errorMessage\">\r\n            {{errorMessage}}\r\n        </span>\r\n        <span class=\"uploaderror\" *ngIf=\"!validationResult.isFileValid\">\r\n           Invalid Data. Please visit line <span *ngFor=\"let line of validationResult.lineErrors ;let i = index\">{{line}}{{i === validationResult.lineErrors.length -1 ? '' : ',' }}</span>\r\n        </span>\r\n    </div>\r\n</div>";
     /***/
   },
 
@@ -121,7 +121,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<header>\r\n  <nav\r\n    class=\"navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3\"\r\n  >\r\n    <div class=\"container\">\r\n      <a class=\"navbar-brand\" [routerLink]=\"['/']\">FileUploader</a>\r\n      <button\r\n        class=\"navbar-toggler\"\r\n        type=\"button\"\r\n        data-toggle=\"collapse\"\r\n        data-target=\".navbar-collapse\"\r\n        aria-label=\"Toggle navigation\"\r\n        [attr.aria-expanded]=\"isExpanded\"\r\n        (click)=\"toggle()\"\r\n      >\r\n        <span class=\"navbar-toggler-icon\"></span>\r\n      </button>\r\n      <div\r\n        class=\"navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse\"\r\n        [ngClass]=\"{ show: isExpanded }\"\r\n      >\r\n        <ul class=\"navbar-nav flex-grow\">\r\n          <!--<li\r\n            class=\"nav-item\"\r\n            [routerLinkActive]=\"['link-active']\"\r\n            [routerLinkActiveOptions]=\"{ exact: true }\"\r\n          >\r\n            <a class=\"nav-link text-dark\" [routerLink]=\"['/']\">Home</a>\r\n          </li>\r\n          <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n            <a class=\"nav-link text-dark\" [routerLink]=\"['/counter']\"\r\n              >Counter</a\r\n            >\r\n          </li>-->\r\n          <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n            <a class=\"nav-link text-dark\" [routerLink]=\"['/fetch-data']\"\r\n              >Fetch data</a\r\n            >\r\n          </li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </nav>\r\n</header>\r\n";
+    __webpack_exports__["default"] = "<header>\r\n  <nav\r\n    class=\"navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3\"\r\n  >\r\n    <div class=\"container\">\r\n      <a class=\"navbar-brand\" [routerLink]=\"['/']\">FileUploader</a>\r\n      <button\r\n        class=\"navbar-toggler\"\r\n        type=\"button\"\r\n        data-toggle=\"collapse\"\r\n        data-target=\".navbar-collapse\"\r\n        aria-label=\"Toggle navigation\"\r\n        [attr.aria-expanded]=\"isExpanded\"\r\n        (click)=\"toggle()\"\r\n      >\r\n        <span class=\"navbar-toggler-icon\"></span>\r\n      </button>\r\n      <div\r\n        class=\"navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse\"\r\n        [ngClass]=\"{ show: isExpanded }\"\r\n      >\r\n        <ul class=\"navbar-nav flex-grow\">\r\n          <!--<li\r\n            class=\"nav-item\"\r\n            [routerLinkActive]=\"['link-active']\"\r\n            [routerLinkActiveOptions]=\"{ exact: true }\"\r\n          >\r\n            <a class=\"nav-link text-dark\" [routerLink]=\"['/']\">Home</a>\r\n          </li>\r\n          <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n            <a class=\"nav-link text-dark\" [routerLink]=\"['/counter']\"\r\n              >Counter</a\r\n            >\r\n          </li>-->\r\n          <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n            <a class=\"nav-link text-dark\" [routerLink]=\"['/api/fileupload/transactions']\"\r\n              >Fetch data</a\r\n            >\r\n          </li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </nav>\r\n</header>\r\n";
     /***/
   },
 
@@ -517,7 +517,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = ".upload {\r\n    font-weight: bold;\r\n    color: #28a745;\r\n    margin-left: 15px;\r\n    line-height: 36px;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZmlsZS11cGxvYWQvZmlsZS11cGxvYWQuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLGlCQUFpQjtJQUNqQixjQUFjO0lBQ2QsaUJBQWlCO0lBQ2pCLGlCQUFpQjtBQUNyQiIsImZpbGUiOiJzcmMvYXBwL2ZpbGUtdXBsb2FkL2ZpbGUtdXBsb2FkLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIudXBsb2FkIHtcclxuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG4gICAgY29sb3I6ICMyOGE3NDU7XHJcbiAgICBtYXJnaW4tbGVmdDogMTVweDtcclxuICAgIGxpbmUtaGVpZ2h0OiAzNnB4O1xyXG59XHJcbiJdfQ== */";
+    __webpack_exports__["default"] = ".upload {\r\n    font-weight: bold;\r\n    color: #28a745;\r\n    margin-left: 15px;\r\n    line-height: 36px;\r\n}\r\n\r\n.uploaderror {\r\n    font-weight: bold;\r\n    color: #983535;\r\n    margin-left: 15px;\r\n    line-height: 36px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZmlsZS11cGxvYWQvZmlsZS11cGxvYWQuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLGlCQUFpQjtJQUNqQixjQUFjO0lBQ2QsaUJBQWlCO0lBQ2pCLGlCQUFpQjtBQUNyQjs7QUFFQTtJQUNJLGlCQUFpQjtJQUNqQixjQUFjO0lBQ2QsaUJBQWlCO0lBQ2pCLGlCQUFpQjtBQUNyQiIsImZpbGUiOiJzcmMvYXBwL2ZpbGUtdXBsb2FkL2ZpbGUtdXBsb2FkLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIudXBsb2FkIHtcclxuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG4gICAgY29sb3I6ICMyOGE3NDU7XHJcbiAgICBtYXJnaW4tbGVmdDogMTVweDtcclxuICAgIGxpbmUtaGVpZ2h0OiAzNnB4O1xyXG59XHJcblxyXG4udXBsb2FkZXJyb3Ige1xyXG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiAgICBjb2xvcjogIzk4MzUzNTtcclxuICAgIG1hcmdpbi1sZWZ0OiAxNXB4O1xyXG4gICAgbGluZS1oZWlnaHQ6IDM2cHg7XHJcbn0iXX0= */";
     /***/
   },
 
@@ -552,6 +552,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
     /*! @angular/core */
     "./node_modules/@angular/core/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @angular/router */
+    "./node_modules/@angular/router/fesm2015/router.js");
 
     var __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
       var c = arguments.length,
@@ -575,38 +581,61 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var FileUploadComponent = /*#__PURE__*/function () {
       // Inject service 
-      function FileUploadComponent(http) {
+      function FileUploadComponent(http, router) {
         var _this2 = this;
 
         _classCallCheck(this, FileUploadComponent);
 
         this.http = http;
+        this.router = router;
         this.onUploadFInished = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
 
         this.uploadFile = function (files) {
           if (files.length === 0) return;
+
+          _this2.clearFields();
+
           var fileToUpload = files[0];
           var formData = new FormData();
           formData.append('file', fileToUpload, fileToUpload.name);
 
-          _this2.http.post('https://localhost:44304/api/fileupload', formData, {
+          _this2.http.post(location.origin + '/api/fileupload', formData, {
             reportProgress: true,
             observe: 'events'
           }).subscribe(function (event) {
-            if (event.type === _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpEventType"].UploadProgress) {
-              _this2.progress = Math.round(100 * event.loaded / event.total);
-            } else if (event.type === _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpEventType"].Response) {
-              _this2.message = 'Upload success.';
+            debugger;
+
+            if (event.type === _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpEventType"].Response) {
+              _this2.message = event.statusText;
+              _this2.validationResult = event.body;
 
               _this2.onUploadFInished.emit(event.body);
             }
+          }, function (error) {
+            debugger;
+            _this2.errorMessage = error.error;
           });
         };
       }
 
       _createClass(FileUploadComponent, [{
         key: "ngOnInit",
-        value: function ngOnInit() {}
+        value: function ngOnInit() {
+          this.validationResult = {
+            isFileValid: true,
+            lineErrors: []
+          };
+        }
+      }, {
+        key: "clearFields",
+        value: function clearFields() {
+          this.message = "";
+          this.validationResult = {
+            isFileValid: true,
+            lineErrors: []
+          };
+          this.errorMessage = "";
+        }
       }]);
 
       return FileUploadComponent;
@@ -615,6 +644,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     FileUploadComponent.ctorParameters = function () {
       return [{
         type: _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"]
+      }, {
+        type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]
       }];
     };
 
@@ -628,7 +659,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       styles: [__importDefault(__webpack_require__(
       /*! ./file-upload.component.css */
       "./src/app/file-upload/file-upload.component.css"))["default"]]
-    }), __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"]])], FileUploadComponent);
+    }), __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])], FileUploadComponent);
     /***/
   },
 

@@ -7,6 +7,8 @@ using System.Xml;
 using System.Xml.Linq;
 using MediatR;
 using FileUploader.DAL.Command;
+using FileUploader.Models.Error;
+using FileUploader.Interface;
 
 namespace FileUploader.Services
 {
@@ -18,18 +20,18 @@ namespace FileUploader.Services
             _mediator = mediator;
 
         }
-        public bool ProcessFile(string fileContent)
+        public ValidationResult ProcessFile(string fileContent)
         {
             var xmlDoc = XDocument.Parse(fileContent);
-
+            var invalidInfo = new ValidationResult();
             var transactions = new List<Transaction>();
-
+            var line = 0;
             var isFileValid = true;
 
             foreach (var element in xmlDoc.Root.Elements("Transaction"))
             {
                 var transaction = new Transaction();
-
+                line += 1;
                 var transactionId = element.Attribute("id").Value;
                 if (!String.IsNullOrEmpty(transactionId))
                 {
@@ -38,6 +40,7 @@ namespace FileUploader.Services
                 else
                 {
                     isFileValid = false;
+                    invalidInfo.LineErrors.Add(line);
                     continue;
                 }
 
@@ -49,6 +52,7 @@ namespace FileUploader.Services
                 else
                 {
                     isFileValid = false;
+                    invalidInfo.LineErrors.Add(line);
                     continue;
                 }
 
@@ -60,6 +64,7 @@ namespace FileUploader.Services
                 else
                 {
                     isFileValid = false;
+                    invalidInfo.LineErrors.Add(line);
                     continue;
                 }
 
@@ -71,6 +76,7 @@ namespace FileUploader.Services
                 else
                 {
                     isFileValid = false;
+                    invalidInfo.LineErrors.Add(line);
                     continue;
                 }
 
@@ -82,6 +88,7 @@ namespace FileUploader.Services
                 else
                 {
                     isFileValid = false;
+                    invalidInfo.LineErrors.Add(line);
                     continue;
                 }
 
@@ -97,7 +104,10 @@ namespace FileUploader.Services
 
                 _ = _mediator.Send(createTransactionsCommand).Result;
             }
-            return isFileValid;
+
+            invalidInfo.IsFileValid = isFileValid;
+
+            return invalidInfo;
         }
     }
 }

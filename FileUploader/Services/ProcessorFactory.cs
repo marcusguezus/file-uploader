@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FileUploader.Interface;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
